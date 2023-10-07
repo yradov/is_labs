@@ -1,0 +1,80 @@
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("train_and_test2.csv", usecols = ('Age', 'Sex', '2urvived'))
+#df.describe()
+df.rename(columns = {'2urvived': 'Survived'}, inplace=True)
+df['Age_group'] = df['Age']
+#df['Age_group'].fillna(-1) # fill empty filds by -1
+#df[ df['Age_group'] > 50 ]
+#df[ df['Age_group'].isna() ]
+
+df.Sex = df.Sex.map(lambda sex: 'Male' if 0 == sex else 'Female')
+
+df['Age_group'] = df.Age_group.map(lambda age: int(age//10))
+survived = df.groupby(['Sex', 'Age_group', 'Survived'])
+survived.size().unstack().plot(kind='barh', stacked=True)
+# Настройки графика
+plt.title('Выжившие и Невыжившие по возрастным группам и полу')
+plt.ylabel('Группа возраста')
+plt.xlabel('Количество')
+
+plt.legend(title='Выжил', labels=['нет', 'да'])
+
+# Отображаем график
+plt.show()
+
+
+====================================
+====================================
+====================================
+
+import pandas as pd
+
+df = pd.read_csv("train_and_test2.csv", usecols = ('Age', '2urvived'))
+df.rename(columns = {'2urvived': 'Survived'}, inplace=True)
+df['Age_group'] = df['Age']
+df['Age_group'] = df.Age_group.map(lambda age: int(age//10))
+
+survived = df[df['Survived'] == 1]
+
+s_grouped = survived.groupby(['Age_group']).size()
+#print(s_grouped)
+
+s_max =s_grouped.max()
+
+max_qty=s_grouped[s_grouped==s_max]
+
+print(f'group with max survived people: {max_qty.index[0]}')
+
+s_grouped
+====================================
+====================================
+====================================
+import pandas as pd
+
+df2 = pd.read_csv("train_and_test2.csv", usecols = ('Age', '2urvived'))
+df2.rename(columns = {'2urvived': 'Survived'}, inplace=True)
+df2['Age_group'] = df2['Age']
+df2['Age_group'] = df2.Age_group.map(lambda age: int(age//10))
+
+
+s_grouped = df2.groupby(['Age_group', 'Survived']).size()
+print(s_grouped[0])
+survived_0 = s_grouped.loc[(0, 0)]
+print(survived_0)
+
+# Получаем значение для Survived=1
+survived_1 = s_grouped.loc[(0, 1)]
+print(survived_1)
+
+print(s_grouped)
+#percentage = s_grouped.map(lambda x: s_grouped[x][0]/s_grouped[x][1]*100)
+#percentage = s_grouped.unstack().assign(Percentage=lambda x: 0 if x[1] == 0 else 100 if x[0] == 0 else x[1] / x[0]  * 100)['Percentage']
+
+#percentage = s_grouped.unstack().apply(lambda x: 0 if x.loc[1] == 0 else 100 if x.loc[0] == 0 else x.loc[1] / x.loc[0] * 100, axis=1)
+print(percentage)
+
+s_grouped[0][1]
