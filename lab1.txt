@@ -78,3 +78,137 @@ print(s_grouped)
 print(percentage)
 
 s_grouped[0][1]
+
+====================================
+====================================
+====================================
+import pandas as pd
+
+df2 = pd.read_csv("train_and_test2.csv", usecols = ('Age', '2urvived'))
+df2.rename(columns = {'2urvived': 'Survived'}, inplace=True)
+df2['Age_group'] = df2['Age']
+df2['Age_group'] = df2.Age_group.map(lambda age: int(age//10))
+
+s_grouped = df2.groupby(['Age_group', 'Survived']).size()
+
+s_groupedDF = s_grouped.reset_index()
+
+serv_pcnt = []    
+i = 0
+while i < len(s_groupedDF.Age_group.unique()):
+    survived = 0
+    died = 0
+    result = 0
+    
+    try:
+        survived = s_grouped[i][1]
+    except Exception as e:
+        survived = 0
+       
+    try:
+        died = s_grouped[i][0]
+        
+    except Exception as e:
+        died = 0
+    if died != 0 or survived != 0:
+        result = 100 if died == 0 else 0 if survived == 0 else round(survived/died * 100, 2)
+        print(f"group: {i} - {result}%")
+        serv_pcnt.append(result)
+        
+    i += 1
+      
+index_of_max = serv_pcnt.index(max(serv_pcnt))
+print("================================================")
+print(f"group with the max percentage of survivors - {index_of_max}")
+print("================================================")
+
+====================================
+====================================
+====================================
+import pandas as pd
+
+df2 = pd.read_csv("train_and_test2.csv", usecols = ('Age', '2urvived'))
+df2.rename(columns = {'2urvived': 'Survived'}, inplace=True)
+df2['Age_group'] = df2['Age']
+df2['Age_group'] = df2.Age_group.map(lambda age: int(age//10))
+
+
+s_grouped = df2.groupby(['Age_group', 'Survived']).size()
+
+#print(s_grouped[0])
+survived_0 = s_grouped.loc[(0, 0)]
+#print(survived_0)
+
+# Получаем значение для Survived=1
+survived_1 = s_grouped.loc[(0, 1)]
+#print(survived_1)
+
+#print(s_grouped)
+#s_grouped.describe()
+#s_grouped.info()
+s_grouped[s_grouped == 44]
+s_grouped.max()
+
+#print(s_grouped.loc[(8, 0)])
+#print(df2['Age'])
+#print(df2['Age'][1308])
+
+#for index, value in s_grouped.items():
+#    print(f"{index}, {value}")
+
+s_groupedDF = s_grouped.reset_index()
+s_groupedDF.rename(columns={0: "sum"}, inplace=True)
+#print(s_groupedDF) ##################################################
+#s_groupedDF.info()
+#s_groupedDF.filter(lambda x: x['Survived'] == 0, axis=0)
+#surv = s_groupedDF[s_groupedDF['Survived'] == 0]
+#not_surv = s_groupedDF[s_groupedDF['Survived'] == 1]
+#print(surv, not_surv)
+
+#s_groupedDF.unstack(fill_value=0)
+#s_groupedDF['sum']
+res = s_groupedDF.groupby(['Age_group', 'Survived'], as_index=False).filter(lambda x: x['Survived'] == 0)
+res
+
+#for index, value in s_grouped.items():
+#    print(f"{index}, {value}")
+    #print(f"{index[0]}, {index[1]}")
+
+
+list(s_grouped.items())
+
+
+s_groupedDF[ s_groupedDF.Survived == 1]
+
+s_grouped[s_grouped > 50]
+
+
+    
+serv_pcnt = []    
+i = 0
+while i < len(s_groupedDF.Age_group.unique()):
+    survived = 0
+    died = 0
+    result = 0
+    
+    try:
+        survived = s_grouped[i][1]
+    except Exception as e:
+        survived = 0
+       
+    try:
+        died = s_grouped[i][0]
+    except Exception as e:
+        died = 0
+    if died != 0 or survived != 0:
+        result = 100 if died == 0 else 0 if survived == 0 else round(survived/died * 100, 2)
+        print(f"group: {i} - {result}%")
+        serv_pcnt.append(result)
+        
+    i += 1
+    
+#print(serv_pcnt)   
+index_of_max = serv_pcnt.index(max(serv_pcnt))
+print("================================================")
+print(f"group with the max percentage of survivors - {index_of_max}")
+print("================================================")
